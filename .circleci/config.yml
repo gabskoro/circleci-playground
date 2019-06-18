@@ -3,6 +3,7 @@ version: 2.1
 
 jobs:
   build:
+    working_directory: ~/
     docker:
       - image: circleci/openjdk:8-jdk-stretch-node-browsers
     steps:
