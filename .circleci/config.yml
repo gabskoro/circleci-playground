@@ -7,6 +7,12 @@ jobs:
       - image: circleci/openjdk:8-jdk-stretch-node-browsers
     steps:
       - run:
+          name: Path
+          command: pwd
+      - run:
+          name: ls
+          command: ls -al
+      - run:
           name: 'Yarn install'
           command: 'yarn install'
       - run:
