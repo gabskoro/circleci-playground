@@ -1,6 +1,7 @@
 version: 2.1
 jobs:
   build_frontend:
+    working_directory: ./fo-frontend
     docker:
       - image: circleci/node:11.9.0-browsers
     steps:
