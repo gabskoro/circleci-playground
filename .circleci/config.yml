@@ -28,11 +28,17 @@ jobs:
           name: Build project
           command: cd fo-frontend; yarn build
 
+      - run:
+          name: Upload to jFrog
+          command: cd fo-frontend; mvn deploy -s ../.circleci/settings.xml -Dmaven.skip.fe=true
+
   deploy:
+    docker:
+      - image: circleci/node:11.9.0
     steps:
       - run:
-          name: Deploy
-          command: mvn deploy -s .circleci/settings.xml -Dmaven.skip.fe=true
+          name: Deploy app
+          command: ssh ubuntu@3.122.12.41
 
 workflows:
   version: 2
@@ -40,6 +46,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build_frontend
-      - deploy
-        - requires:
-            - build_frontend
+      - deploy:
+          context: avrios-jfrog
+          requires:
+              - build_frontend
