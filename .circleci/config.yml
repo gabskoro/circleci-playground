@@ -1,7 +1,6 @@
 version: 2.1
 jobs:
   build_frontend:
-    working_directory: ~/project/fo-frontend
     docker:
       - image: circleci/node:11.9.0-browsers
     steps:
@@ -9,23 +8,31 @@ jobs:
 
       - restore_cache:
           name: Restore yarn package cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ checksum "fo-frontend/yarn.lock" }}
 
       - run:
           name: Yarn install
-          command: yarn install --frozen-lockfile
+          command: cd fo-frontend; yarn install --frozen-lockfile
 
       - save_cache:
           name: Save yarn package cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ checksum "fo-frontend/yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
-      - run: ls -al
+      - run:
+          name: "Run tests"
+          command: cd fo-frontend; yarn test
 
       - run:
           name: Build project
-          command: yarn build
+          command: cd fo-frontend; yarn build
+
+  deploy:
+    steps:
+      - run:
+          name: Deploy
+          command: mvn deploy -s .circleci/settings.xml -Dmaven.skip.fe=true
 
 workflows:
   version: 2
@@ -33,3 +40,6 @@ workflows:
   build-and-deploy:
     jobs:
       - build_frontend
+      - deploy
+        - requires:
+            - build_frontend

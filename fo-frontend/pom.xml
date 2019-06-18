@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fo-frontend</artifactId>
+    <groupId>com.skoro.gabrijel</groupId>
+    <version>4.9.0-GABRIJEL-SNAPSHOT</version>
+
+    <properties>
+
+        <!-- build web frontend by default, override with  mvn clean install -Dmaven.skip.fe=true -->
+        <maven.skip.fe>false</maven.skip.fe>
+
+    </properties>
+
+    <build>
+
+        <resources>
+            <resource>
+                <directory>dist/</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <skip>${maven.skip.fe}</skip>
+                </configuration>
+                <executions>
+
+                    <!-- run "yarn install" to install the dependencies -->
+                    <execution>
+                        <id>yarn-install</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>yarn</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- run "yarn build" to compile the frontend -->
+                    <execution>
+                        <id>yarn-build</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>yarn</executable>
+                            <arguments>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <!-- clear folder we got from yarn -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <skip>${maven.skip.fe}</skip>
+                    <filesets>
+                        <fileset>
+                            <directory>dist/</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
