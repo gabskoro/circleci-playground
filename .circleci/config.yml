@@ -6,6 +6,8 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk-stretch-node-browsers
     steps:
+      - checkout
+
       - run:
           name: Path
           command: pwd
