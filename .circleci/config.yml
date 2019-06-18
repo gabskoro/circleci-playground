@@ -2,7 +2,7 @@
 version: 2.1
 
 jobs:
-  build:
+  build_it:
     docker:
       - image: circleci/openjdk:8-jdk-stretch-node-browsers
     steps:
@@ -26,4 +26,4 @@ workflows:
   Welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - build
+      - build_it
