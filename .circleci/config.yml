@@ -13,10 +13,10 @@ jobs:
           name: ls
           command: ls -al
       - run:
-          name: 'Yarn install'
-          command: 'yarn install'
+          name: Yarn install
+          command: yarn install
       - run:
-          name: 'Build project'
+          name: Build project
           command: yarn build
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
